@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import AllPuppies from "../components/AllPuppies";
 
 const MainContainer = () => {
   const [puppies, setPuppies] = useState([]);
@@ -56,9 +57,40 @@ const MainContainer = () => {
     setSelectedPuppies(results)
   };
 
+  const handleRemovePuppy = (id) => {
+    const filteredPuppies = favouritePuppies.filter((puppy) => puppy._id !== id);
+    setFavouritePuppies(filteredPuppies);
+  }
+
   return (
     <>
-      <h1>Puppies</h1>
+    <div className="header">
+      <div>
+        <button className="basket" onClick={() => setBasketIsOpen(!basketIsOpen)}>
+          <GrBasket id="gr-basket"/>
+        </button>
+        {basketIsOpen && (
+          <favouritePuppies
+          puppies={favouritePuppies}
+          handleRemovePuppy={handleRemovePuppy}
+          />
+        )}
+      </div>
+    </div>
+
+    <TitleBar puppies={puppies} onPuppiesSelected={onPuppiesSelected} />
+    <div className="puppy-container">
+      {selectedPuppies ? (selectedPuppies.length ? (
+        <AllPuppies
+          puppies={selectedPuppies}
+          handleButtonClick={handlePuppyClick}
+        />
+      ) : (
+        <PuppyDetail puppy={selectedPuppies} newFavourites={favouriteSelected}/>
+      )
+      ): null}
+    </div>
+    
     </>
   );
 };
